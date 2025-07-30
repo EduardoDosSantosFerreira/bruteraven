@@ -15,7 +15,7 @@ Um projeto educacional que demonstra como realizar força bruta em redes Wi-Fi c
   - RockYou (opcional)
   - Arquivo local `.txt`
   - URL remota
-- Interface gráfica com:
+  - Interface gráfica com:
   - Combobox de redes com força do sinal
   - Opções extras (Verbose, Modo Rápido, Forçar download)
   - Botão para iniciar o ataque
@@ -121,5 +121,4 @@ Este projeto é fornecido **apenas para fins educacionais e testes em ambientes 
 **Não me responsabilizo por qualquer uso indevido.**
 
 ```
-
 ---

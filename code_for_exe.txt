@@ -1,0 +1,6 @@
+pyinstaller --onefile --noconsole --clean --name Crowvert --icon "corvo.ico" main.py
+
+para minificar use:
+pyinstaller --onefile --noconsole --clean --name Bruteraven --icon bruteraven.ico --upx-dir "C:\Users\CALLCENTER\Downloads\upx-5.0.1-win64" main.py
+
+Caso commite alguma coisa errada, git reset --hard HEAD~x (x sendo o numero de commits errados)

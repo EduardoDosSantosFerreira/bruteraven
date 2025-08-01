@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="BruteRaven - Ferramenta educacional para testes de força bruta em redes Wi-Fi. Apenas para fins educacionais e testes autorizados.">
+    <meta name="keywords" content="BruteRaven, Wi-Fi, brute force, segurança, pentest, pywifi">
+    <title>BruteRaven - Wi-Fi Brute Force Tool</title>
+    <link rel="icon" type="image/png" href="./bruteraven.png">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Orbitron:wght@500;600;700&display=swap"
+        rel="stylesheet">
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            --primary-color: #1a1307;
+            --secondary-color: #2d1e0f;
+            --accent-color: #ff9800;
+            /* Laranja principal */
+            --accent-color-dark: #e65100;
+            /* Laranja escuro para hover */
+            --danger-color: #ff5722;
+            /* Laranja avermelhado */
+            --text-color: #fff3e0;
+            --muted-color: #ffd180;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: var(--text-color);
+            background-color: var(--primary-color);
+            overflow-x: hidden;
+        }
+
+        .navbar {
+            background-color: rgba(26, 19, 7, 0.95);
+            box-shadow: 0 2px 20px rgba(255, 152, 0, 0.2);
+            padding: 15px 0;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 152, 0, 0.4);
+        }
+
+        .navbar.scrolled {
+            padding: 10px 0;
+            background-color: rgba(26, 19, 7, 0.98);
+        }
+
+        .navbar-brand {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: var(--accent-color) !important;
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            margin: 0 15px;
+            color: var(--muted-color) !important;
+            transition: all 0.3s ease;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+
+        .btn-download {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: 600;
+            border-radius: 4px;
+            padding: 10px 25px;
+            transition: all 0.3s ease;
+            border: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Orbitron', sans-serif;
+        }
+
+        .btn-download:hover {
+            background-color: var(--accent-color-dark);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 152, 0, 0.3);
+        }
+
+        .hero {
+            background: linear-gradient(rgba(26, 19, 7, 0.92), rgba(26, 19, 7, 0.92)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 150px 0 100px;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 3px;
+            color: var(--accent-color);
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--accent-color);
+            transition: all 0.5s ease;
+        }
+
+        .hero-img:hover {
+            transform: scale(1.03);
+        }
+
+        .section-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 50px;
+            position: relative;
+            letter-spacing: 2px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--accent-color);
+        }
+
+        .warning-box {
+            background-color: rgba(255, 87, 34, 0.15);
+            border-left: 4px solid var(--danger-color);
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+        }
+
+        .feature-card {
+            background: rgba(45, 30, 15, 0.7);
+            border-radius: 5px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            height: 100%;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(255, 152, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--accent-color);
+        }
+
+        .feature-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--text-color);
+            letter-spacing: 1px;
+        }
+
+        .feature-text {
+            color: var(--muted-color);
+        }
+
+        .feature-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 152, 0, 0.08);
+            color: var(--muted-color);
+        }
+
+        .feature-list li::before {
+            content: '\f054';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            color: var(--accent-color);
+            margin-right: 10px;
+        }
+
+        .screenshot-section {
+            background-color: rgba(45, 30, 15, 0.7);
+            padding: 100px 0;
+        }
+
+        .screenshot-img {
+            border-radius: 5px;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            border: 2px solid var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .screenshot-img:hover {
+            transform: scale(1.03);
+        }
+
+        .how-to-use-item {
+            background: rgba(45, 30, 15, 0.7);
+            border-radius: 5px;
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+            border-top: 4px solid var(--accent-color);
+        }
+
+        .how-to-use-item:hover {
+            background: rgba(45, 30, 15, 0.9);
+            transform: translateY(-5px);
+        }
+
+        .how-to-use-icon {
+            font-size: 3rem;
+            color: var(--accent-color);
+            margin-bottom: 20px;
+        }
+
+        .code-block {
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            padding: 15px;
+            font-family: 'Courier New', monospace;
+            color: var(--muted-color);
+            overflow-x: auto;
+        }
+
+        .cta-section {
+            background: linear-gradient(rgba(26, 19, 7, 0.92), rgba(26, 19, 7, 0.92)), url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+        }
+
+        .cta-text {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 80px 0 30px;
+            border-top: 1px solid rgba(255, 152, 0, 0.2);
+        }
+
+        .footer-logo {
+            height: 60px;
+            margin-bottom: 30px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 15px;
+        }
+
+        .footer-links a {
+            color: var(--muted-color);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+            padding-left: 5px;
+        }
+
+        .social-icons a {
+            display: inline-block;
+            width: 45px;
+            height: 45px;
+            background-color: rgba(255, 152, 0, 0.15);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 45px;
+            color: white;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+            font-size: 1.2rem;
+        }
+
+        .social-icons a:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 152, 0, 0.3);
+        }
+
+        .copyright {
+            border-top: 1px solid rgba(255, 152, 0, 0.2);
+            padding-top: 30px;
+            margin-top: 60px;
+            color: var(--muted-color);
+            font-size: 0.9rem;
+        }
+
+        .badge-raven {
+            background-color: var(--accent-color);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            padding: 5px 15px;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .cta-title {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar Melhorada -->
+    <nav class="navbar navbar-expand-lg fixed-top shadow-sm custom-navbar">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="#">
+                <img src="./bruteraven.png" alt="BruteRaven Logo" height="40" class="me-2">
+                <span class="fw-bold">BruteRaven</span>
+            </a>
+            <button class="navbar-toggler text-white border-0" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav align-items-lg-center">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#features">Recursos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#how-to-use">Como Usar</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#screenshots">Screenshots</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#legal">Aviso Legal</a>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="btn btn-accent px-3 py-2 d-flex align-items-center" href="./dist/Bruteraven.exe">
+                            <i class="fas fa-download me-2"></i>Download
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <style>
+        :root {
+            --primary-color: #1a1307;
+            --secondary-color: #2d1e0f;
+            --accent-color: #ff9800;
+            --accent-color-dark: #e65100;
+        }
+
+        .custom-navbar {
+            background-color: var(--primary-color);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #fff !important;
+        }
+
+        .nav-link {
+            padding: 0.5rem 1rem;
+            transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-color) !important;
+        }
+
+        .btn-accent {
+            background-color: var(--accent-color);
+            color: #000;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: background-color 0.2s ease-in-out;
+        }
+
+        .btn-accent:hover {
+            background-color: var(--accent-color-dark);
+            color: #fff;
+        }
+
+        .navbar-toggler {
+            outline: none;
+            border: none;
+        }
+    </style>
+
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1 class="hero-title" data-aos="fade-down">BruteRaven</h1>
+            <p class="hero-subtitle" data-aos="fade-up" data-aos-delay="100">
+                Ferramenta educacional para testes de força bruta em redes Wi-Fi. Apenas para fins educacionais e testes
+                autorizados.
+            </p>
+            <div class="warning-box" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                <strong>AVISO LEGAL:</strong> Este software é apenas para fins educacionais. Testar redes sem
+                autorização é crime.
+            </div>
+            <div data-aos="fade-up" data-aos-delay="300">
+                <a href="./dist/Bruteraven.exe" class="btn btn-download btn-lg mr-3 mb-3">
+                    <i class="fas fa-download mr-2"></i>Download Educacional
+                </a>
+                <a href="#features" class="btn btn-outline-light btn-lg mb-3">
+                    <i class="fas fa-info-circle mr-2"></i>Saiba Mais
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5" style="padding: 100px 0;">
+        <div class="container">
+            <h2 class="section-title text-center" data-aos="fade-up">Recursos Técnicos</h2>
+            <div class="row">
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <h3 class="feature-title">Escaneamento Avançado</h3>
+                        <p class="feature-text">
+                            Detecta redes Wi-Fi disponíveis com informações detalhadas sobre força do sinal e tipo de
+                            segurança.
+                        </p>
+                        <ul class="feature-list">
+                            <li>Lista completa de redes visíveis</li>
+                            <li>Indicador de força do sinal</li>
+                            <li>Detecção de tipo de criptografia</li>
+                            <li>Atualização em tempo real</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3 class="feature-title">Wordlists Flexíveis</h3>
+                        <p class="feature-text">
+                            Suporte a múltiplas fontes de wordlists para testes de força bruta.
+                        </p>
+                        <ul class="feature-list">
+                            <li>Top100k (download automático)</li>
+                            <li>RockYou (opcional)</li>
+                            <li>Arquivos locais .txt</li>
+                            <li>URLs remotas</li>
+                            <li>Cache inteligente</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Otimizações</h3>
+                        <p class="feature-text">
+                            Configurações avançadas para melhorar a eficiência dos testes.
+                        </p>
+                        <ul class="feature-list">
+                            <li>Modo Verbose para detalhes</li>
+                            <li>Modo Rápido (menos delay)</li>
+                            <li>Forçar download de wordlists</li>
+                            <li>Seleção específica por SSID</li>
+                            <li>Interface limpa e intuitiva</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How To Use Section -->
+    <section id="how-to-use" class="py-5" style="padding: 100px 0; background-color: rgba(26, 26, 46, 0.7);">
+        <div class="container">
+            <h2 class="section-title text-center" data-aos="fade-up">Como Usar</h2>
+            <div class="row">
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="how-to-use-item text-center">
+                        <i class="fas fa-desktop how-to-use-icon"></i>
+                        <h3>Interface Gráfica</h3>
+                        <p>
+                            Execute <code>python ui_launcher.py</code> para iniciar a interface gráfica que irá escanear
+                            redes disponíveis e permitir configurar o ataque.
+                        </p>
+                        <span class="badge-raven">Recomendado</span>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                    <div class="how-to-use-item text-center">
+                        <i class="fas fa-terminal how-to-use-icon"></i>
+                        <h3>Linha de Comando</h3>
+                        <p>
+                            Para usuários avançados, execute diretamente <code>python main.py</code> com parâmetros
+                            personalizados.
+                        </p>
+                        <div class="code-block text-left mt-3">
+                            <small># Exemplo básico:</small><br>
+                            python main.py -w top100k
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-lg-8 mx-auto" data-aos="fade-up" data-aos-delay="300">
+                    <h3 class="text-center mb-4">Comandos Disponíveis</h3>
+                    <div class="table-responsive">
+                        <table class="table table-dark">
+                            <thead>
+                                <tr>
+                                    <th>Parâmetro</th>
+                                    <th>Descrição</th>
+                                    <th>Exemplo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>-w, --wordlist</td>
+                                    <td>Seleciona wordlist (top100k/rockyou)</td>
+                                    <td>-w top100k</td>
+                                </tr>
+                                <tr>
+                                    <td>-f, --file</td>
+                                    <td>Usa arquivo local como wordlist</td>
+                                    <td>-f lista.txt</td>
+                                </tr>
+                                <tr>
+                                    <td>-u, --url</td>
+                                    <td>Baixa wordlist de URL remota</td>
+                                    <td>-u http://exemplo.com/lista.txt</td>
+                                </tr>
+                                <tr>
+                                    <td>--ssid</td>
+                                    <td>Especifica rede-alvo por SSID</td>
+                                    <td>--ssid "MinhaRede"</td>
+                                </tr>
+                                <tr>
+                                    <td>-v, --verbose</td>
+                                    <td>Ativa modo detalhado</td>
+                                    <td>-v</td>
+                                </tr>
+                                <tr>
+                                    <td>--quick</td>
+                                    <td>Ativa modo rápido (menos delay)</td>
+                                    <td>--quick</td>
+                                </tr>
+                                <tr>
+                                    <td>--force-download</td>
+                                    <td>Força novo download da wordlist</td>
+                                    <td>--force-download</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Legal Section -->
+    <section id="legal" class="py-5" style="padding: 100px 0; background-color: rgba(230, 57, 70, 0.1);">
+        <div class="container">
+            <h2 class="section-title text-center" data-aos="fade-up">Aviso Legal</h2>
+            <div class="row">
+                <div class="col-lg-8 mx-auto" data-aos="fade-up" data-aos-delay="100">
+                    <div class="warning-box">
+                        <h3 class="text-center"><i class="fas fa-gavel"></i> Uso Responsável</h3>
+                        <p>
+                            O BruteRaven é fornecido <strong>APENAS PARA FINS EDUCACIONAIS</strong> e para testes em
+                            ambientes controlados onde você tem permissão explícita para testar a segurança da rede.
+                        </p>
+                        <ul class="feature-list">
+                            <li>Não utilize esta ferramenta em redes que você não possui</li>
+                            <li>Não utilize para atividades ilegais</li>
+                            <li>Respeite a privacidade alheia</li>
+                            <li>Consulte as leis locais sobre testes de segurança</li>
+                        </ul>
+                        <p class="text-center mt-4">
+                            <strong>O autor não se responsabiliza por qualquer uso indevido desta ferramenta.</strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Download Section -->
+    <section id="download" class="cta-section">
+        <div class="container">
+            <h2 class="cta-title" data-aos="fade-up">Pronto para Aprender?</h2>
+            <p class="cta-text" data-aos="fade-up" data-aos-delay="100">
+                Baixe o BruteRaven apenas se você compreende e aceita os termos de uso responsável e possui permissão
+                para testar redes.
+            </p>
+            <a href="./dist/BruteRaven.zip" class="btn btn-download btn-lg" data-aos="fade-up" data-aos-delay="200">
+                <i class="fas fa-download mr-2"></i>Download Educacional
+            </a>
+            <div class="mt-4" data-aos="fade-up" data-aos-delay="300">
+                <small class="text-muted">Requisitos: Windows com adaptador Wi-Fi, Python 3.8+, permissões de
+                    administrador</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-5">
+                    <img src="./assets/raven-icon.png" alt="BruteRaven Logo" class="footer-logo">
+                    <p class="mt-3">
+                        BruteRaven é um projeto educacional desenvolvido para demonstrar técnicas básicas de testes de
+                        segurança em redes Wi-Fi.
+                    </p>
+                    <div class="social-icons mt-4">
+                        <a href="https://github.com/EduardoDosSantosFerreira"><i class="fab fa-github"></i></a>
+                        <a href="https://www.linkedin.com/in/eduardodossantosferreira/"><i
+                                class="fab fa-linkedin"></i></a>
+                        <a href="https://discordapp.com/users/eduardo_dsf"><i class="fab fa-discord"></i></a>
+                        <a href="mailto:eduardosferreira69@gmail.com"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-5">
+                    <h5>Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#features">Recursos</a></li>
+                        <li><a href="#how-to-use">Como Usar</a></li>
+                        <li><a href="#screenshots">Screenshots</a></li>
+                        <li><a href="#legal">Aviso Legal</a></li>
+                        <li><a href="./dist/Bruteraven.exe">Download</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-5">
+                    <h5>Autor</h5>
+                    <p>
+                        Desenvolvido por <strong>Eduardo dos Santos Ferreira</strong>
+                    </p>
+                    <p>
+                        GitHub: <a href="https://github.com/EduardoDosSantosFerreira">EduardoDosSantosFerreira</a>
+                    </p>
+                    <p>
+                        Contato: <a href="mailto:eduardosferreira69@gmail.com">eduardosferreira69@gmail.com</a>
+                    </p>
+                </div>
+            </div>
+            <div class="copyright text-center">
+                <p>&copy; 2025 Eduardo S Ferreira. Todos os direitos reservados. | BruteRaven - Ferramenta Educacional
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS, Popper.js, jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js"></script>
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Custom JS -->
+    <script>
+        // Initialize AOS animation
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+        });
+
+        // Navbar scroll effect
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 50) {
+                $('.navbar').addClass('scrolled');
+            } else {
+                $('.navbar').removeClass('scrolled');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        $('a[href*="#"]').on('click', function (e) {
+            e.preventDefault();
+
+            $('html, body').animate(
+                {
+                    scrollTop: $($(this).attr('href')).offset().top - 70,
+                },
+                500,
+                'linear'
+            );
+        });
+    </script>
+</body>
+
+</html>

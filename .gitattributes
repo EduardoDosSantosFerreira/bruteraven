@@ -13,7 +13,3 @@ dist/* linguist-vendored
 *.png linguist-generated
 *.ico linguist-generated
 *.svg linguist-generated
-
-# Ignorar arquivos HTML
-*.html linguist-generated
-*.htm linguist-generated
